@@ -106,7 +106,7 @@ int main(int argc, char** argv) {
 	my_id = p.getIdentifier();
 	myrank = p.getRank();
 
-	while (true) // loop to continue until a leader is elected
+	while (true) // loop to continue 
 	{
 		if (p.getStatus() == true) { // If an active node			
 			if (myrank == 0) // Special boundary handling for first process in ring
