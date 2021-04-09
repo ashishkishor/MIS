@@ -95,7 +95,7 @@ public:
 
 int main(int argc, char** argv) {
 	int myrank, nprocs;
-	int my_id, left_id, right_id,right=0,int left=0,int h=0;
+	int my_id, left_id, right_id,right=0,left=0,h=0;
 
 	MPI_Init(&argc, &argv);
 	MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
@@ -229,11 +229,12 @@ int main(int argc, char** argv) {
 			}
 			else // Rest of the nodes (e.g p1,p2..)
 			{
-				MPI_Recv(&right_id, 1, MPI_INT, myrank - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE); // recv from previous neighbour
-				MPI_Send(&right_id, 1, MPI_INT, myrank + 1, 0, MPI_COMM_WORLD); // pass on to next neighbour
-
-				MPI_Recv(&left_id, 1, MPI_INT, myrank + 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE); // recv from next neighbour
-				MPI_Send(&left_id, 1, MPI_INT, myrank - 1, 0, MPI_COMM_WORLD); // pass to previous neighbour
+				int temp=0;
+				MPI_Recv(&temp, 1, MPI_INT, myrank - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE); // recv from previous neighbour
+				MPI_Send(&temp, 1, MPI_INT, myrank + 1, 0, MPI_COMM_WORLD); // pass on to next neighbour
+				int temp1;
+				MPI_Recv(&temp1, 1, MPI_INT, myrank + 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE); // recv from next neighbour
+				MPI_Send(&temp1, 1, MPI_INT, myrank - 1, 0, MPI_COMM_WORLD); // pass to previous neighbour
 			}
 		}
 	}
