@@ -5,6 +5,7 @@
 #include<iostream>
 #include <ctime> 
 #include<bits/stdc++.h>
+#include <unistd.h>
 using namespace std;
 
 int generateRandomNumber(int rank, int size) {
@@ -168,6 +169,7 @@ int main(int argc, char** argv)
 	}
 	printf("\n");
 	int flag=0;
+	
 	if(v==0)
 	{
 	    if(v1==config)
@@ -177,39 +179,39 @@ int main(int argc, char** argv)
 	    p.state="X0";
 	    sprintf(buffer,"X1");
 	    if(myrank-1>=0)
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(myrank-1),0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,strlen(buffer)+1,MPI_CHAR,(myrank-1),0,MPI_COMM_WORLD);
 	    else
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(nprocs+myrank-1),0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,strlen(buffer)+1,MPI_CHAR,(nprocs+myrank-1),0,MPI_COMM_WORLD);
 	    memset(buffer,0,sizeof(buffer));
 	    sprintf(buffer,"0");
 	    if(myrank-2>=0)
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(myrank-2),0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,strlen(buffer)+1,MPI_CHAR,(myrank-2),0,MPI_COMM_WORLD);
 	    else
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(nprocs+myrank-2),0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,strlen(buffer)+1,MPI_CHAR,(nprocs+myrank-2),0,MPI_COMM_WORLD);
 	    memset(buffer,0,sizeof(buffer));
 	    sprintf(buffer,"1");
 	    if(myrank-3>=0)
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(myrank-3),0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,strlen(buffer)+1,MPI_CHAR,(myrank-3),0,MPI_COMM_WORLD);
 	    else
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(nprocs+myrank-3),0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,strlen(buffer)+1,MPI_CHAR,(nprocs+myrank-3),0,MPI_COMM_WORLD);
 	    memset(buffer,0,sizeof(buffer));
 	    sprintf(buffer,"0");
 	    if(myrank-4>=0)
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(myrank-4),0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,strlen(buffer)+1,MPI_CHAR,(myrank-4),0,MPI_COMM_WORLD);
 	    else
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(nprocs+myrank-4),0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,strlen(buffer)+1,MPI_CHAR,(nprocs+myrank-4),0,MPI_COMM_WORLD);
 	    memset(buffer,0,sizeof(buffer));
 	    sprintf(buffer,"X1");
 	    if(myrank-5>=0)
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(myrank-5),0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,strlen(buffer)+1,MPI_CHAR,(myrank-5),0,MPI_COMM_WORLD);
 	    else
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(nprocs+myrank-5),0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,strlen(buffer)+1,MPI_CHAR,(nprocs+myrank-5),0,MPI_COMM_WORLD);
 	    memset(buffer,0,sizeof(buffer));
 	    sprintf(buffer,"X0");
 	    if(myrank-6>=0)
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(myrank-6),0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,strlen(buffer)+1,MPI_CHAR,(myrank-6),0,MPI_COMM_WORLD);
 	    else
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(nprocs+myrank-6),0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,strlen(buffer)+1,MPI_CHAR,(nprocs+myrank-6),0,MPI_COMM_WORLD);
 	    
 	    }
 	    
@@ -217,33 +219,34 @@ int main(int argc, char** argv)
 	if(flag==0)
 	    {
 	    char msg[10];
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(myrank+1)%nprocs, 0, MPI_COMM_WORLD,&request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(myrank+1)%nprocs, 0, MPI_COMM_WORLD,&request);
 	    printf("node %d received from node %d ,the state =%s\n",myrank,myrank+1,msg);
 	    if(strlen(msg)>0)
 	    p.state=msg;
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(myrank+2)%nprocs, 0, MPI_COMM_WORLD,&request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(myrank+2)%nprocs, 0, MPI_COMM_WORLD,&request);
 	    printf("node %d received from node %d ,the state =%s\n",myrank,myrank+2,msg);
 	    if(strlen(msg)>0)
 	    p.state=msg;
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(myrank+3)%nprocs, 0, MPI_COMM_WORLD, &request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(myrank+3)%nprocs, 0, MPI_COMM_WORLD, &request);
 	    printf("node %d received from node %d ,the state =%s\n",myrank,myrank+3,msg);
 	    if(strlen(msg)>0)
 	    p.state=msg;
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(myrank+4)%nprocs, 0, MPI_COMM_WORLD, &request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(myrank+4)%nprocs, 0, MPI_COMM_WORLD, &request);
 	    printf("node %d received from node %d ,the state =%s\n",myrank,myrank+4,msg);
 	    if(strlen(msg)>0)
 	    p.state=msg;
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(myrank+5)%nprocs, 0, MPI_COMM_WORLD, &request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(myrank+5)%nprocs, 0, MPI_COMM_WORLD, &request);
 	    printf("node %d received from node %d ,the state =%s\n",myrank,myrank+5,msg);
 	    if(strlen(msg)>0)
 	    p.state=msg;
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(myrank+6)%nprocs, 0, MPI_COMM_WORLD, &request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(myrank+6)%nprocs, 0, MPI_COMM_WORLD, &request);
 	    printf("node %d received from node %d ,the state =%s\n",myrank,myrank+6,msg);
 	    if(strlen(msg)>0)
 	    p.state=msg;
 	    }
 	
 	MPI_Barrier(MPI_COMM_WORLD);
+	
 	if(v==2)
 	{
 	    if(v2==config)
@@ -252,18 +255,18 @@ int main(int argc, char** argv)
 	    char buffer[10];
 	    p.state="X0";
 	    sprintf(buffer,"X1");
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(myrank+1)%nprocs,0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,10,MPI_CHAR,(myrank+1)%nprocs,0,MPI_COMM_WORLD);
 	    
 	    sprintf(buffer,"0");
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(myrank+2)%nprocs,0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,10,MPI_CHAR,(myrank+2)%nprocs,0,MPI_COMM_WORLD);
 	    sprintf(buffer,"1");
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(myrank+3)%nprocs,0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,10,MPI_CHAR,(myrank+3)%nprocs,0,MPI_COMM_WORLD);
 	    sprintf(buffer,"0");
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(myrank+4)%nprocs,0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,10,MPI_CHAR,(myrank+4)%nprocs,0,MPI_COMM_WORLD);
 	    sprintf(buffer,"X1");
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(myrank+5)%nprocs,0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,10,MPI_CHAR,(myrank+5)%nprocs,0,MPI_COMM_WORLD);
 	    sprintf(buffer,"X0");
-	    MPI_Send(&buffer,10+nprocs,MPI_CHAR,(myrank+6)%nprocs,0,MPI_COMM_WORLD);
+	    MPI_Send(&buffer,10,MPI_CHAR,(myrank+6)%nprocs,0,MPI_COMM_WORLD);
 	    
 	    }
 	    
@@ -272,109 +275,144 @@ int main(int argc, char** argv)
 	    {
 	    char msg[10];
 	    if(myrank-1>=0)
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(myrank-1), 0, MPI_COMM_WORLD,&request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(myrank-1), 0, MPI_COMM_WORLD,&request);
 	    else
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(nprocs+myrank-1), 0, MPI_COMM_WORLD, &request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(nprocs+myrank-1), 0, MPI_COMM_WORLD, &request);
 	    if(strlen(msg)>0)
 	    p.state=msg;
 	     if(myrank-2>=0)
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(myrank-2), 0, MPI_COMM_WORLD, &request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(myrank-2), 0, MPI_COMM_WORLD, &request);
 	    else
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(nprocs+myrank-2), 0, MPI_COMM_WORLD, &request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(nprocs+myrank-2), 0, MPI_COMM_WORLD, &request);
 	    if(strlen(msg)>0)
 	    p.state=msg;
 	     if(myrank-3>=0)
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(myrank-3), 0, MPI_COMM_WORLD, &request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(myrank-3), 0, MPI_COMM_WORLD, &request);
 	    else
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(nprocs+myrank-3), 0, MPI_COMM_WORLD, &request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(nprocs+myrank-3), 0, MPI_COMM_WORLD, &request);
 	    if(strlen(msg)>0)
 	    p.state=msg;
 	     if(myrank-4>=0)
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(myrank-4), 0, MPI_COMM_WORLD, &request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(myrank-4), 0, MPI_COMM_WORLD, &request);
 	    else
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(nprocs+myrank-4), 0, MPI_COMM_WORLD,&request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(nprocs+myrank-4), 0, MPI_COMM_WORLD,&request);
 	    if(strlen(msg)>0)
 	    p.state=msg;
 	     if(myrank-5>=0)
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(myrank-5), 0, MPI_COMM_WORLD, &request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(myrank-5), 0, MPI_COMM_WORLD, &request);
 	    else
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(nprocs+myrank-5), 0, MPI_COMM_WORLD, &request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(nprocs+myrank-5), 0, MPI_COMM_WORLD, &request);
 	    if(strlen(msg)>0)
 	    p.state=msg;
 	     if(myrank-6>=0)
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(myrank-6), 0, MPI_COMM_WORLD, &request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(myrank-6), 0, MPI_COMM_WORLD, &request);
 	    else
-	    MPI_Irecv(&msg,10+nprocs, MPI_CHAR,(nprocs+myrank-6), 0, MPI_COMM_WORLD, &request);
+	    MPI_Irecv(&msg,10, MPI_CHAR,(nprocs+myrank-6), 0, MPI_COMM_WORLD, &request);
 	    if(strlen(msg)>0)
 	    p.state=msg;
 	    }
-	MPI_Barrier(MPI_COMM_WORLD);
-	printf("node %d has state %s\n",myrank,p.state); 
-	
-	//Phase 2 :Expansion process(debugging needs to be done) 
-	/*
-	if(p.state=="X0")
-	{
-	int exp=1;
-	MPI_Send(&exp,1,MPI_INT,(myrank+4)%nprocs,0,MPI_COMM_WORLD);
-	
-	if(myrank-4>=0)
-	MPI_Send(&exp,1,MPI_INT,(myrank-4),0,MPI_COMM_WORLD);
-	else
-	MPI_Send(&exp,1,MPI_INT,(nprocs+myrank-4),0,MPI_COMM_WORLD);
 
-	}
-	else 
+	printf("node %d has state %s\n",myrank,p.state); 
+	MPI_Barrier(MPI_COMM_WORLD);
+
+	//Phase 2 :Expansion process
+	if(myrank==0)
+	printf("Phase 2\n");
+	
+	
+	char exp[10],msg1[10];
+	sprintf(exp,p.state);
+	MPI_Send(&exp,10,MPI_CHAR,(myrank+4)%nprocs,0,MPI_COMM_WORLD);
+	printf("node %d has sent message to %d = %s\n",myrank,(myrank+4)%nprocs,exp);
+	MPI_Barrier(MPI_COMM_WORLD);
+	if(myrank-4>=0)
 	{
-	 int exp=0;
+	MPI_Irecv(&msg1,10, MPI_CHAR,(myrank-4), 0, MPI_COMM_WORLD,&request);
+	printf("node %d has received message from %d = %s\n",myrank,myrank-4,&request);
+	}
+	
+	else
+	{MPI_Irecv(&msg1,10, MPI_CHAR,(nprocs+myrank-4), 0, MPI_COMM_WORLD,&request);
+	
+	printf("node %d has received message from %d = %s\n",myrank,nprocs+myrank-4,msg1);
+	}
+	
+        /*
+	if(myrank-4>=0)
+	MPI_Send(&exp,10,MPI_CHAR,(myrank-4),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&exp,10,MPI_CHAR,(nprocs+myrank-4),0,MPI_COMM_WORLD);
+	*/
+       /*
+	 char rbuf[10];
+	 printf("efew %s\n",rbuf);
 	 if(myrank-4>=0)
-	 MPI_Irecv(&exp,1, MPI_INT,(myrank-4), 0, MPI_COMM_WORLD, &request);
+	 {
+	 MPI_Irecv(&rbuf,10,MPI_CHAR,(myrank-4),0, MPI_COMM_WORLD,&request);
+	 if(strlen(rbuf)>0)
+	 {
+	 printf("node %d has received message from %d = %s\n",myrank,myrank-4,rbuf);
+	 }
+	 }
 	 else
-	 MPI_Irecv(&exp,1, MPI_INT,(nprocs+myrank-4), 0, MPI_COMM_WORLD, &request);
-	 	if(exp==1)
-		 {
+	 {
+	 MPI_Irecv(&rbuf,10, MPI_CHAR,(nprocs+myrank-4), 0, MPI_COMM_WORLD,&request);
+	 if(strlen(rbuf)>0)
+	 printf("node %d has received message from %d=  %s\n",myrank,nprocs+myrank-4,rbuf);
+	 }
+	 MPI_Barrier(MPI_COMM_WORLD);
+	 if(myrank==0)
+	printf("ashish\n");
+	
+	 
+	 if(p.state=="X0"&&msg1=="?")
+	{
 	 	char m[10];
 	 	sprintf(m,p.state);
+	 	//printf("node %d has sent message to node %d\n",myrank,myrank-4);
 	 	if(myrank-4>=0)
-	 MPI_Send(&m,10+nprocs,MPI_CHAR,(myrank-4),0,MPI_COMM_WORLD);
+	 MPI_Send(&m,10,MPI_CHAR,(myrank-4),0,MPI_COMM_WORLD);
 	 	else
-	 MPI_Send(&m,10+nprocs,MPI_CHAR,(nprocs+myrank-4),0,MPI_COMM_WORLD);
-	  	}
-	 }
+	 MPI_Send(&m,10,MPI_CHAR,(nprocs+myrank-4),0,MPI_COMM_WORLD);
+	}
+	 MPI_Barrier(MPI_COMM_WORLD);
 	 if(p.state=="X0")
 	 {
 	 char buff[10];
-	 MPI_Recv(&buff,10+nprocs, MPI_CHAR,(myrank+1)%nprocs, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	 if(buff=="?")
+	 MPI_Irecv(&buff,10, MPI_CHAR,(myrank+4)%nprocs, 0, MPI_COMM_WORLD,&request);
+	 */
+	// printf("node %d has receieved message from node %d\n",myrank,(myrank+4)%nprocs);
+	 
+	 
+	 if(p.state=="X0"&&msg1=="X1")
 	 {
 	 p.state="0";
 	 char b[10];
 	 sprintf(b,"X1");
-	 MPI_Send(&b,10+nprocs,MPI_CHAR,(myrank+1)%nprocs,0,MPI_COMM_WORLD);
+	 MPI_Send(&b,10,MPI_CHAR,(myrank+1)%nprocs,0,MPI_COMM_WORLD);
 	 sprintf(b,"X0");
-	 MPI_Send(&b,10+nprocs,MPI_CHAR,(myrank+2)%nprocs,0,MPI_COMM_WORLD);
+	 MPI_Send(&b,10,MPI_CHAR,(myrank+2)%nprocs,0,MPI_COMM_WORLD);
 	 sprintf(b,"1");
 	 if(myrank-1>=0)
-	 MPI_Send(&b,10+nprocs,MPI_CHAR,(myrank-1),0,MPI_COMM_WORLD);
+	 MPI_Send(&b,10,MPI_CHAR,(myrank-1),0,MPI_COMM_WORLD);
 	 else
-	 MPI_Send(&b,10+nprocs,MPI_CHAR,(nprocs+myrank-1),0,MPI_COMM_WORLD);
+	 MPI_Send(&b,10,MPI_CHAR,(nprocs+myrank-1),0,MPI_COMM_WORLD);
 	 
 	 }
-	 
-	 }
+	
 	 if(p.state=="?")
 	 {
 	 char str[10];
 	 if(myrank-1>=0)
-	 MPI_Irecv(&str,10+nprocs, MPI_CHAR,(myrank-1), 0, MPI_COMM_WORLD, &request);
+	 MPI_Irecv(&str,10, MPI_CHAR,(myrank-1), 0, MPI_COMM_WORLD, &request);
 	 else
-	 MPI_Irecv(&str,1, MPI_CHAR,(nprocs+myrank-1), 0, MPI_COMM_WORLD, &request);
+	 MPI_Irecv(&str,10, MPI_CHAR,(nprocs+myrank-1), 0, MPI_COMM_WORLD, &request);
 	 if(str=="X1")
 	 p.state=str;
 	 if(myrank-2>=0)
-	 MPI_Irecv(&str,10+nprocs, MPI_CHAR,(myrank-2), 0, MPI_COMM_WORLD, &request);
+	 MPI_Irecv(&str,10, MPI_CHAR,(myrank-2), 0, MPI_COMM_WORLD, &request);
 	 else
-	 MPI_Irecv(&str,1, MPI_CHAR,(nprocs+myrank-2), 0, MPI_COMM_WORLD, &request);
+	 MPI_Irecv(&str,10, MPI_CHAR,(nprocs+myrank-2), 0, MPI_COMM_WORLD, &request);
 	 if(str=="X0")
 	 p.state=str;
 	 
@@ -382,18 +420,333 @@ int main(int argc, char** argv)
 	 if(p.state=="X1")
 	 {
 	 char str[10];
-	 MPI_Irecv(&str,10+nprocs, MPI_CHAR,(myrank+1)%nprocs, 0, MPI_COMM_WORLD, &request);
+	 MPI_Irecv(&str,10, MPI_CHAR,(myrank+1)%nprocs, 0, MPI_COMM_WORLD, &request);
 	 if(str=="1")
 	 p.state=str;
 	 }
+	 
 	 MPI_Barrier(MPI_COMM_WORLD);
 	 if(myrank==0)
 	 printf("After expansion process\n");
 	
 	 printf("node %d has state %s\n",myrank,p.state); 
-	*/
 	 
+	MPI_Barrier(MPI_COMM_WORLD);
+	if(myrank==0)
+	printf("Filling starts\n");
+	//Filling process
+	vector<string>v3;
+	char buff[10];
+	sprintf(buff,p.state);
+	char message[10];
+	for(int i=1;i<=7;i++)
+	{
+	
+	    MPI_Send(&buff,10,MPI_CHAR,(myrank+i)%nprocs,0,MPI_COMM_WORLD);
+	    if((myrank-i)>=0)
+	    {MPI_Irecv(&message,10, MPI_CHAR,(myrank-i), 0, MPI_COMM_WORLD,&request);
+	    printf("Node %d receives from node %d = %d\n",myrank,myrank-i,message);
+	    v3.push_back(message);
+	    }
+	    else
+	    {MPI_Irecv(&message,10, MPI_CHAR,(nprocs+myrank-i), 0, MPI_COMM_WORLD,&request);
+	    printf("Node %d receives from node %d =%d\n",myrank,nprocs+myrank-i,message);
+	    v3.push_back(message);
+	    }
+	    MPI_Barrier(MPI_COMM_WORLD);
+	}
+	MPI_Barrier(MPI_COMM_WORLD);
+	if(p.state=="X0")
+	{
+	int count=0;
+	for(int i=0;i<v3.size();i++)
+	{
+	if(v3[i]=="?")
+	count++;
+	else
+	break;
+	}
+	if(count==0)   ///F0 configuration
+	{
+	p.state=0;
+	char tt[10];
+	sprintf(tt,"1");
+	MPI_Send(&tt,10,MPI_CHAR,(myrank+1)%nprocs,0,MPI_COMM_WORLD);
+	sprintf(tt,"0");
+	if(myrank-1>=0)
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-1),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-1+nprocs),0,MPI_COMM_WORLD);
+        sprintf(tt,"1");
+        if(myrank-2>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-2),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-2+nprocs),0,MPI_COMM_WORLD);
+	}
+	if(count==1)
+	{
+	p.state="0";
+	char tt[10];
+	sprintf(tt,"1");
+	MPI_Send(&tt,10,MPI_CHAR,(myrank+1)%nprocs,0,MPI_COMM_WORLD);
+	sprintf(tt,"1");
+	if(myrank-1>=0)
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-1),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-1+nprocs),0,MPI_COMM_WORLD);
+        sprintf(tt,"0");
+        if(myrank-2>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-2),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-2+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"1");
+        if(myrank-3>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-3),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-3+nprocs),0,MPI_COMM_WORLD);
+	}
+	if(count==2)
+	{
+	p.state="1";
+	char tt[10];
+	sprintf(tt,"0");
+	MPI_Send(&tt,10,MPI_CHAR,(myrank+1)%nprocs,0,MPI_COMM_WORLD);
+	sprintf(tt,"0");
+	if(myrank-1>=0)
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-1),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-1+nprocs),0,MPI_COMM_WORLD);
+        sprintf(tt,"0");
+        if(myrank-2>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-2),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-2+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"1");
+        if(myrank-3>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-3),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-3+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"0");
+        if(myrank-4>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-4),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-4+nprocs),0,MPI_COMM_WORLD);
+	}
+	if(count==3)
+	{
+	p.state="1";
+	char tt[10];
+	sprintf(tt,"0");
+	MPI_Send(&tt,10,MPI_CHAR,(myrank+1)%nprocs,0,MPI_COMM_WORLD);
+	sprintf(tt,"0");
+	if(myrank-1>=0)
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-1),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-1+nprocs),0,MPI_COMM_WORLD);
+        sprintf(tt,"1");
+        if(myrank-2>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-2),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-2+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"0");
+        if(myrank-3>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-3),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-3+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"1");
+        if(myrank-4>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-4),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-4+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"0");
+        if(myrank-5>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-5),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-5+nprocs),0,MPI_COMM_WORLD);
+	}
+	if(count==4)
+	{
+	p.state="0";
+	char tt[10];
+	sprintf(tt,"1");
+	MPI_Send(&tt,10,MPI_CHAR,(myrank+1)%nprocs,0,MPI_COMM_WORLD);
+	sprintf(tt,"1");
+	if(myrank-1>=0)
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-1),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-1+nprocs),0,MPI_COMM_WORLD);
+        sprintf(tt,"0");
+        if(myrank-2>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-2),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-2+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"0");
+        if(myrank-3>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-3),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-3+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"1");
+        if(myrank-4>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-4),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-4+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"0");
+        if(myrank-5>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-5),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-5+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"1");
+        if(myrank-6>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-6),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-6+nprocs),0,MPI_COMM_WORLD);
+	}
+	if(count==5)
+	{
+	p.state="0";
+	char tt[10];
+	sprintf(tt,"1");
+	MPI_Send(&tt,10,MPI_CHAR,(myrank+1)%nprocs,0,MPI_COMM_WORLD);
+	sprintf(tt,"1");
+	if(myrank-1>=0)
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-1),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-1+nprocs),0,MPI_COMM_WORLD);
+        sprintf(tt,"0");
+        if(myrank-2>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-2),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-2+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"1");
+        if(myrank-3>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-3),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-3+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"0");
+        if(myrank-4>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-4),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-4+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"1");
+        if(myrank-5>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-5),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-5+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"0");
+        if(myrank-6>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-6),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-6+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"1");
+        if(myrank-7>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-7),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-7+nprocs),0,MPI_COMM_WORLD);
+	}
+	if(count==6)
+	{
+	p.state="0";
+	char tt[10];
+	sprintf(tt,"1");
+	MPI_Send(&tt,10,MPI_CHAR,(myrank+1)%nprocs,0,MPI_COMM_WORLD);
+	sprintf(tt,"0");
+	if(myrank-1>=0)
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-1),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-1+nprocs),0,MPI_COMM_WORLD);
+        sprintf(tt,"1");
+        if(myrank-2>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-2),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-2+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"0");
+        if(myrank-3>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-3),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-3+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"0");
+        if(myrank-4>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-4),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-4+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"1");
+        if(myrank-5>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-5),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-5+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"0");
+        if(myrank-6>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-6),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-6+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"0");
+        if(myrank-7>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-7),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-7+nprocs),0,MPI_COMM_WORLD);
+	sprintf(tt,"1");
+        if(myrank-8>=0)
+        MPI_Send(&tt,10,MPI_CHAR,(myrank-8),0,MPI_COMM_WORLD);
+	else
+	MPI_Send(&tt,10,MPI_CHAR,(myrank-8+nprocs),0,MPI_COMM_WORLD);
+	}
+	}
+	char sy[10];
+	MPI_Irecv(&sy,10, MPI_CHAR,(myrank+1)%nprocs, 0, MPI_COMM_WORLD, &request);
+	if(strlen(sy)>0)
+	{
+	p.state=sy;
+	memset(sy,NULL,sizeof(sy));
+	}
+	MPI_Irecv(&sy,10, MPI_CHAR,(myrank+2)%nprocs, 0, MPI_COMM_WORLD, &request);
+	if(strlen(sy)>0)
+	{
+	p.state=sy;
+	memset(sy,NULL,sizeof(sy));
+	}
+	MPI_Irecv(&sy,10, MPI_CHAR,(myrank+3)%nprocs, 0, MPI_COMM_WORLD, &request);
+	if(strlen(sy)>0)
+	{
+	p.state=sy;
+	memset(sy,NULL,sizeof(sy));
+	}
+	MPI_Irecv(&sy,10, MPI_CHAR,(myrank+4)%nprocs, 0, MPI_COMM_WORLD, &request);
+	if(strlen(sy)>0)
+	{
+	p.state=sy;
+	memset(sy,NULL,sizeof(sy));
+	}
+	MPI_Irecv(&sy,10, MPI_CHAR,(myrank+5)%nprocs, 0, MPI_COMM_WORLD, &request);
+	if(strlen(sy)>0)
+	{
+	p.state=sy;
+	memset(sy,NULL,sizeof(sy));
+	}
+	MPI_Irecv(&sy,10, MPI_CHAR,(myrank+6)%nprocs, 0, MPI_COMM_WORLD, &request);
+	if(strlen(sy)>0)
+	{
+	p.state=sy;
+	memset(sy,NULL,sizeof(sy));
+	}
+	MPI_Irecv(&sy,10, MPI_CHAR,(myrank+7)%nprocs, 0, MPI_COMM_WORLD, &request);
+	if(strlen(sy)>0)
+	{
+	p.state=sy;
+	memset(sy,NULL,sizeof(sy));
+	}
+	MPI_Irecv(&sy,10, MPI_CHAR,(myrank+8)%nprocs, 0, MPI_COMM_WORLD, &request);
+	if(strlen(sy)>0)
+	{
+	p.state=sy;
+	memset(sy,NULL,sizeof(sy));
+	}
+        MPI_Barrier(MPI_COMM_WORLD);
+        if(myrank==0)
+	 printf("After Filling process\n");
+	
+	 printf("node %d has state %s\n",myrank,p.state); 
 
 	// Finalize the MPI environment.
 	MPI_Finalize();
+	
 }
