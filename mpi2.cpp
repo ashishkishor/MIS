@@ -483,7 +483,7 @@ int main(int argc, char** argv)
 	else
 	MPI_Send(&tt,10,MPI_CHAR,(myrank-2+nprocs),0,MPI_COMM_WORLD);
 	}
-	if(count==1)
+	if(count==1)  //F1 configuration
 	{
 	p.state="0";
 	char tt[10];
@@ -505,7 +505,7 @@ int main(int argc, char** argv)
 	else
 	MPI_Send(&tt,10,MPI_CHAR,(myrank-3+nprocs),0,MPI_COMM_WORLD);
 	}
-	if(count==2)
+	if(count==2)   //F2 configuration
 	{
 	p.state="1";
 	char tt[10];
@@ -532,7 +532,7 @@ int main(int argc, char** argv)
 	else
 	MPI_Send(&tt,10,MPI_CHAR,(myrank-4+nprocs),0,MPI_COMM_WORLD);
 	}
-	if(count==3)
+	if(count==3)   //F3 configuration
 	{
 	p.state="1";
 	char tt[10];
@@ -564,7 +564,7 @@ int main(int argc, char** argv)
 	else
 	MPI_Send(&tt,10,MPI_CHAR,(myrank-5+nprocs),0,MPI_COMM_WORLD);
 	}
-	if(count==4)
+	if(count==4)    //F4 configuration
 	{
 	p.state="0";
 	char tt[10];
@@ -601,7 +601,7 @@ int main(int argc, char** argv)
 	else
 	MPI_Send(&tt,10,MPI_CHAR,(myrank-6+nprocs),0,MPI_COMM_WORLD);
 	}
-	if(count==5)
+	if(count==5)   //F5 configuration
 	{
 	p.state="0";
 	char tt[10];
@@ -643,7 +643,7 @@ int main(int argc, char** argv)
 	else
 	MPI_Send(&tt,10,MPI_CHAR,(myrank-7+nprocs),0,MPI_COMM_WORLD);
 	}
-	if(count==6)
+	if(count==6)  //F6 configuration
 	{
 	p.state="0";
 	char tt[10];
