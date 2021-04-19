@@ -115,7 +115,10 @@ int main(int argc, char** argv)
 	printf("I am process %d of %d. Unique ID = %d\n", myrank, nprocs, p.identifier);
 	MPI_Barrier(MPI_COMM_WORLD);
 	int v;
+	if(p.state=="?")
 	v=vote();
+	else
+	v=3; //means they already achieved their final state
 	if(myrank==0)
 	v=2;
 	if(myrank==1)
@@ -182,8 +185,17 @@ int main(int argc, char** argv)
 	}
 	printf("\n");
 	MPI_Barrier(MPI_COMM_WORLD);
+	
+    int x=0;
    if(config==v1||v2==config)
+   {
    p.state="X0";
+   x=1;
+   }
+   
+   
+   
+   
    if(config==v1)
    {
       val=1;
@@ -256,6 +268,79 @@ int main(int argc, char** argv)
     }
     else
     val=0;
+    MPI_Barrier(MPI_COMM_WORLD);
+    if(config==v2)
+   {
+      val=1;
+   }
+   else
+   val=0;
+   
+     MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
+    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
+    MPI_Wait(&send_request,&send_status);
+    if(tmp==1)
+    {
+    p.state="X1";
+    val=1;
+    }
+    else
+    val=0;
+    
+     MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
+    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
+    MPI_Wait(&send_request,&send_status);
+    if(tmp==1)
+    {
+    p.state="0";
+    val=1;
+    }
+   else
+   val=0;
+   
+     MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
+    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
+    MPI_Wait(&send_request,&send_status);
+    if(tmp==1)
+    {
+    p.state="1";
+    val=1;
+    }
+   else
+   val=0;
+   
+     MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
+    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
+    MPI_Wait(&send_request,&send_status);
+    if(tmp==1)
+    {
+    p.state="0";
+    val=1;
+    }
+   else
+   val=0;
+   
+     MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
+    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
+    MPI_Wait(&send_request,&send_status);
+    if(tmp==1)
+    {
+    p.state="X1";
+    val=1;
+    }
+   else
+   val=0;
+   
+     MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
+    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
+    MPI_Wait(&send_request,&send_status);
+    if(tmp==1)
+    {
+    p.state="X0";
+    val=1;
+    }
+    else
+    val=0;
  MPI_Barrier(MPI_COMM_WORLD);
  printf("node %d has state %s\n",myrank,p.state);   
  MPI_Barrier(MPI_COMM_WORLD);
@@ -263,6 +348,7 @@ int main(int argc, char** argv)
 	if(myrank==0)
 	printf("Phase 2\n");
     i=0;
+    //to check in right for expansion
     char buf[10],msg[10];
     sprintf(buf,p.state);
   do {
@@ -304,6 +390,52 @@ int main(int argc, char** argv)
     val=0;
     MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
     MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
+    MPI_Wait(&send_request,&send_status);
+    if(tmp==1)
+    p.state="X0";
+    
+      i=0;
+   //now to check in left for expansion
+    sprintf(buf,p.state);
+  do {
+     
+    MPI_Issend(&buf,10,MPI_CHAR,rightid,99,MPI_COMM_WORLD,&send_request);
+    MPI_Recv(&msg,10,MPI_CHAR,leftid,99,MPI_COMM_WORLD,&recv_status);
+    MPI_Wait(&send_request,&send_status);
+    sprintf(buf,msg);
+    //sum += val;
+    i++;
+  } while (i != 4);
+  printf("node %d has buffer =%s\n",myrank,buf);
+  MPI_Barrier(MPI_COMM_WORLD);
+  str=buf;
+  if(p.state=="X0"&&str=="?")
+  {
+  p.state="0";
+  val=1;
+  }
+  else
+  val=0;
+  printf("node %d has state (%s,%d)\n",myrank,p.state,val);
+  MPI_Barrier(MPI_COMM_WORLD);
+  MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
+    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
+    MPI_Wait(&send_request,&send_status);
+   if(tmp==1)
+   p.state="1";
+   
+  MPI_Issend(&val,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&send_request);
+    MPI_Recv(&tmp,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&recv_status);
+    MPI_Wait(&send_request,&send_status);
+    if(tmp==1)
+    {
+    p.state="X1";
+    val=1;
+    }
+    else
+    val=0;
+    MPI_Issend(&val,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&send_request);
+    MPI_Recv(&tmp,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&recv_status);
     MPI_Wait(&send_request,&send_status);
     if(tmp==1)
     p.state="X0";
@@ -495,6 +627,7 @@ int main(int argc, char** argv)
     {
     flag=1;
     }
+    printf("%d = %d\n",myrank,flag);
     } 
     
   MPI_Finalize();
