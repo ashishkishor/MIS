@@ -21,6 +21,11 @@ int generateRandomNumber(int rank, int size) {
 	s = rNums[rank];
 	return s;
 }
+string convertToString(char* a, int size)
+{
+    string s = a;
+    return s;
+}
 int vote()
 {
 	int sample = rand() % 100;
@@ -62,6 +67,27 @@ int main(int argc, char** argv)
         config.push_back(0);
         config.push_back(1);
         config.push_back(0);
+        vector<string>config1,config2;
+        config1.push_back("X1");
+        config1.push_back("X0");
+        config1.push_back("?");
+        config1.push_back("?");
+        config1.push_back("?");
+        config1.push_back("?");
+        config2.push_back("?");
+        config2.push_back("?");
+        config2.push_back("?");
+        config2.push_back("?");
+        config2.push_back("X0");
+        config2.push_back("X1");
+  vector<string>f0,f1,f2,f3,f4,f5,f6;
+  f0={"X0","X0"};
+  f1={"X0","?","X0"};
+  f2={"X0","?","?","X0"};
+  f3={"X0","?","?","?","X0"};
+  f4={"X0","?","?","?","?","X0"};
+  f5={"X0","?","?","?","?","?","X0"};
+  f6={"X0","?","?","?","?","?","?","X0"};
   int myrank, nprocs, leftid, rightid;
   int val, sum, tmp;
   MPI_Status recv_status, send_status;
@@ -110,7 +136,7 @@ int main(int argc, char** argv)
         {
         printf("Round %d \n\n\n\n",j);
         }
-        j++;
+        
   	// Print off a hello world message
 	printf("I am process %d of %d. Unique ID = %d\n", myrank, nprocs, p.identifier);
 	MPI_Barrier(MPI_COMM_WORLD);
@@ -118,7 +144,10 @@ int main(int argc, char** argv)
 	if(p.state=="?")
 	v=vote();
 	else
-	v=3; //means they already achieved their final state
+	v=3;
+	 //means they already achieved their final state
+	if(j==1)
+	{
 	if(myrank==0)
 	v=2;
 	if(myrank==1)
@@ -133,10 +162,12 @@ int main(int argc, char** argv)
 	v=1;
 	if(myrank==6)
 	v=0;
-	
+	}
+	j++;
       //int v=vote();
 		
       printf("%d vote value is =%d\n",myrank,v);
+  int val1=v;
   val = v;
   vector<int>v1;
   v1.push_back(v);
@@ -152,17 +183,19 @@ int main(int argc, char** argv)
     i++;
   } while (i != 7);
   reverse(v1.begin(),v1.end());
+  /*
   printf("size of vote from left to %d node = %d\n",myrank,v1.size());
-  for(int i=0;i<v1.size();i++)
+  for(int l=0;l<v1.size();l++)
 	{
-	printf("%d ",v1[i]);
-	if(i==v1.size()-1)
+	printf("%d ",v1[l]);
+	if(l==v1.size()-1)
 	printf("for node %d",myrank);
 	}
 	printf("\n");
 	MPI_Barrier(MPI_COMM_WORLD);
-	vector<int>v2;
-
+	*/
+  vector<int>v2;
+  val=val1; 
   i=1;
   do {
      
@@ -171,183 +204,75 @@ int main(int argc, char** argv)
     MPI_Wait(&send_request,&send_status);
     v2.push_back(tmp);
     val = tmp;
-    //sum += val;
     i++;
   } while (i != 7);
-  v2.push_back(v);
-  
+  /*
   printf("size of vote from right to %d node = %d\n",myrank,v2.size());
-  for(int i=0;i<v2.size();i++)
+  MPI_Barrier(MPI_COMM_WORLD);
+  for(int l=0;l<v2.size();l++)
 	{
-	printf("%d ",v2[i]);
-	if(i==v2.size()-1)
+	printf("%d ",v2[l]);
+	if(l==v2.size()-1)
 	printf("for node %d",myrank);
 	}
 	printf("\n");
 	MPI_Barrier(MPI_COMM_WORLD);
-	
-    int x=0;
-   if(config==v1||v2==config)
-   {
-   p.state="X0";
-   x=1;
-   }
-   
-   
-   
-   
-   if(config==v1)
-   {
-      val=1;
-   }
-   else
-   val=0;
-   
-     MPI_Issend(&val,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    {
-    p.state="X1";
-    val=1;
-    }
-    else
-    val=0;
-    
-     MPI_Issend(&val,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    {
-    p.state="0";
-    val=1;
-    }
-   else
-   val=0;
-   
-     MPI_Issend(&val,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    {
-    p.state="1";
-    val=1;
-    }
-   else
-   val=0;
-   
-     MPI_Issend(&val,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    {
-    p.state="0";
-    val=1;
-    }
-   else
-   val=0;
-   
-     MPI_Issend(&val,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    {
-    p.state="X1";
-    val=1;
-    }
-   else
-   val=0;
-   
-     MPI_Issend(&val,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    {
-    p.state="X0";
-    val=1;
-    }
-    else
-    val=0;
-    MPI_Barrier(MPI_COMM_WORLD);
-    if(config==v2)
-   {
-      val=1;
-   }
-   else
-   val=0;
-   
-     MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    {
-    p.state="X1";
-    val=1;
-    }
-    else
-    val=0;
-    
-     MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    {
-    p.state="0";
-    val=1;
-    }
-   else
-   val=0;
-   
-     MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    {
-    p.state="1";
-    val=1;
-    }
-   else
-   val=0;
-   
-     MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    {
-    p.state="0";
-    val=1;
-    }
-   else
-   val=0;
-   
-     MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    {
-    p.state="X1";
-    val=1;
-    }
-   else
-   val=0;
-   
-     MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    {
-    p.state="X0";
-    val=1;
-    }
-    else
-    val=0;
+	*/
+  v1.insert(v1.end(),v2.begin(),v2.end());
+  /*
+  MPI_Barrier(MPI_COMM_WORLD);
+  for(int l=0;l<v1.size();l++)
+	{
+	printf("%d ",v1[l]);
+	if(l==v1.size()-1)
+	printf("for node %d",myrank);
+	}
+	printf("\n");
+	MPI_Barrier(MPI_COMM_WORLD);
+*/	
+  int pos=-1;
+  for(int l=0;l<v1.size();l++)
+  {
+  if(v1[l]==config[0])
+  {
+     int k=1;
+     while(k!=config.size()&&(l+k)!=v1.size()&&config[k]==v1[l+k])
+     k++;
+     if(k==config.size())
+     {
+     pos=l;
+     break;
+     }
+  }
+  }
+  if(pos!=-1)
+  {
+  if(pos-6==0)
+  p.state="X0";
+  if(pos-6==-1)
+  p.state="X1";
+  if(pos-6==-2)
+  p.state="0";
+  if(pos-6==-3)
+  p.state="1";
+  if(pos-6==-4)
+  p.state="0";
+  if(pos-6==-5)
+  p.state="X1";
+  if(pos-6==-6)
+  p.state="X0";
+  }
+  
  MPI_Barrier(MPI_COMM_WORLD);
  printf("node %d has state %s\n",myrank,p.state);   
  MPI_Barrier(MPI_COMM_WORLD);
+ 
 //Phase 2 :Expansion process
 	if(myrank==0)
 	printf("Phase 2\n");
+
     i=0;
+    char vec1[5][10],vec2[5][10];
     //to check in right for expansion
     char buf[10],msg[10];
     sprintf(buf,p.state);
@@ -356,89 +281,118 @@ int main(int argc, char** argv)
     MPI_Issend(&buf,10,MPI_CHAR,leftid,99,MPI_COMM_WORLD,&send_request);
     MPI_Recv(&msg,10,MPI_CHAR,rightid,99,MPI_COMM_WORLD,&recv_status);
     MPI_Wait(&send_request,&send_status);
+    sprintf(vec2[i],msg);
     sprintf(buf,msg);
-    //sum += val;
     i++;
-  } while (i != 4);
-  printf("node %d has buffer =%s\n",myrank,buf);
+  } while (i != 5);
   MPI_Barrier(MPI_COMM_WORLD);
-  string str=buf;
-  if(p.state=="X0"&&str=="?")
-  {
-  p.state="0";
-  val=1;
-  }
-  else
-  val=0;
-  printf("node %d has state (%s,%d)\n",myrank,p.state,val);
-  MPI_Barrier(MPI_COMM_WORLD);
-  MPI_Issend(&val,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-   if(tmp==1)
-   p.state="1";
-   
-  MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    {
-    p.state="X1";
-    val=1;
-    }
-    else
-    val=0;
-    MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    p.state="X0";
-    
-      i=0;
-   //now to check in left for expansion
-    sprintf(buf,p.state);
+
+  i=0;
+  sprintf(buf,p.state);
   do {
      
     MPI_Issend(&buf,10,MPI_CHAR,rightid,99,MPI_COMM_WORLD,&send_request);
     MPI_Recv(&msg,10,MPI_CHAR,leftid,99,MPI_COMM_WORLD,&recv_status);
     MPI_Wait(&send_request,&send_status);
+    sprintf(vec1[i],msg);
     sprintf(buf,msg);
-    //sum += val;
     i++;
-  } while (i != 4);
-  printf("node %d has buffer =%s\n",myrank,buf);
-  MPI_Barrier(MPI_COMM_WORLD);
-  str=buf;
-  if(p.state=="X0"&&str=="?")
+  } while (i != 5);
+ /* 
+  for(int l=4;l>=0;l--)
+	{
+	printf("%s ",vec1[l]);
+	if(l==0)
+	printf("for node %d",myrank);
+	}
+	printf("\n");
+MPI_Barrier(MPI_COMM_WORLD);
+*/
+
+  vector<string>v_left;
+  for(int l=4;l>=0;l--)
   {
-  p.state="0";
-  val=1;
+  int a_size = sizeof(vec1[l]) / sizeof(char);
+   string s_a = convertToString(vec1[l], a_size);
+   v_left.insert( v_left.end(),s_a );
+  //v_left.push_back(s_a);
   }
-  else
-  val=0;
-  printf("node %d has state (%s,%d)\n",myrank,p.state,val);
+  v_left.insert( v_left.end(),p.state );
+  for(int l=0;l<5;l++)
+  {
+  int a_size = sizeof(vec2[l]) / sizeof(char);
+   string s_a = convertToString(vec2[l], a_size);
+   v_left.insert( v_left.end(),s_a );
+   //cout<<v_left[v_left.size()-1]<<endl;
+  //v_left.push_back(s_a);
+  }
+  /*
+ MPI_Barrier(MPI_COMM_WORLD);
+  for(int l=0;l<v_left.size();l++)
+	{
+	for(int n=0;n<v_left[l].size();n++)
+	printf("%c",v_left[l][n]);
+	}
+	printf("\n");
+ MPI_Barrier(MPI_COMM_WORLD);
+ */
+  pos=-1;
+   for(int l=0;l<11;l++)
+  {
+  if(v_left[l]==config1[0])
+  {
+     int k=1;
+     while(k<config1.size()&&(l+k)<11&&config1[k]==v_left[l+k])
+     k++;
+     if(k==config1.size())
+     {
+     pos=l;
+     break;
+     }
+  }
+  }
+  if(pos!=-1)
+  {
+  if(pos-5==0)
+  p.state="1";
+  if(pos-5==-1)
+  p.state="0";
+  if(pos-5==-2)
+  p.state="X1";
+  if(pos-5==-3)
+  p.state="X0";
+  }
+  
   MPI_Barrier(MPI_COMM_WORLD);
-  MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-   if(tmp==1)
-   p.state="1";
-   
-  MPI_Issend(&val,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    {
-    p.state="X1";
-    val=1;
-    }
-    else
-    val=0;
-    MPI_Issend(&val,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp==1)
-    p.state="X0";
+  pos=-1;
+   for(int l=0;l<11;l++)
+  {
+  if(v_left[l]==config2[0])
+  {
+     int k=1;
+     while(k<config2.size()&&(l+k)<11&&config2[k]==v_left[l+k])
+     k++;
+     if(k==config2.size())
+     {
+     pos=l;
+     break;
+     }
+  }
+  }
+  if(pos!=-1)
+  {
+  if(5-pos==5)
+  p.state="1";
+  if(5-pos==4)
+  p.state="0";
+  if(5-pos==3)
+  p.state="X1";
+  if(5-pos==2)
+  p.state="X0";
+  }
+  
+  
+  
     
     MPI_Barrier(MPI_COMM_WORLD);
 	 if(myrank==0)
@@ -446,188 +400,258 @@ int main(int argc, char** argv)
 	
 	 printf("node %d has state %s\n",myrank,p.state);
 	 MPI_Barrier(MPI_COMM_WORLD);
+
     if(myrank==0)
     printf("filling phase starts\n");
-    char v3[6][10];
-    i=1;
     
+    i=0;
+    char vec3[8][10],vec4[8][10];
     sprintf(buf,p.state);
   do {
+     
     MPI_Issend(&buf,10,MPI_CHAR,leftid,99,MPI_COMM_WORLD,&send_request);
     MPI_Recv(&msg,10,MPI_CHAR,rightid,99,MPI_COMM_WORLD,&recv_status);
     MPI_Wait(&send_request,&send_status);
-    
-    string str=msg;
-    
-    sprintf(v3[i-1],msg);
+    sprintf(vec3[i],msg);
     sprintf(buf,msg);
-    //sum += val;
     i++;
-  } while (i != 7);
-  int count=0;
+  } while (i != 8);
+  MPI_Barrier(MPI_COMM_WORLD);
+
+  i=0;
+  sprintf(buf,p.state);
+  do {
+     
+    MPI_Issend(&buf,10,MPI_CHAR,rightid,99,MPI_COMM_WORLD,&send_request);
+    MPI_Recv(&msg,10,MPI_CHAR,leftid,99,MPI_COMM_WORLD,&recv_status);
+    MPI_Wait(&send_request,&send_status);
+    sprintf(vec4[i],msg);
+    sprintf(buf,msg);
+    i++;
+  } while (i != 8);
   
-   for(int i=0;i<6;i++)
+ 
+MPI_Barrier(MPI_COMM_WORLD);
+  v_left.clear();
+  for(int l=7;l>=0;l--)
+  {
+  int a_size = sizeof(vec4[l]) / sizeof(char);
+   string s_a = convertToString(vec4[l], a_size);
+   v_left.insert( v_left.end(),s_a );
+  //v_left.push_back(s_a);
+  }
+  v_left.insert( v_left.end(),p.state );
+  for(int l=0;l<8;l++)
+  {
+  int a_size = sizeof(vec3[l]) / sizeof(char);
+   string s_a = convertToString(vec3[l], a_size);
+   v_left.insert( v_left.end(),s_a );
+   //cout<<v_left[v_left.size()-1]<<endl;
+  //v_left.push_back(s_a);
+  }
+  /*
+ MPI_Barrier(MPI_COMM_WORLD);
+  for(int l=0;l<v_left.size();l++)
 	{
-	printf("%s ",v3[i]);
-	if(i==5)
-	printf("for node %d",myrank);
+	for(int n=0;n<v_left[l].size();n++)
+	printf("%c",v_left[l][n]);
+	printf(" ");
+	if(l==v_left.size()-1)
+	printf("for node %d ",myrank);
 	}
 	printf("\n");
-	MPI_Barrier(MPI_COMM_WORLD);
-
-  if(p.state=="X0")
-  {
+ MPI_Barrier(MPI_COMM_WORLD);
+ */
+ vector<string>f0_prepare;
+ for(int i=6;i<=10;i++)
+ f0_prepare.push_back(v_left[i]);
+ vector<string>f1_prepare;
+ for(int i=5;i<=11;i++)
+ f1_prepare.push_back(v_left[i]);
+  vector<string>f2_prepare;
+  for(int i=4;i<=12;i++)
+ f2_prepare.push_back(v_left[i]);
+ vector<string>f3_prepare;
+  for(int i=3;i<=13;i++)
+ f3_prepare.push_back(v_left[i]);
+ vector<string>f4_prepare;
+  for(int i=2;i<=14;i++)
+ f4_prepare.push_back(v_left[i]);
+ vector<string>f5_prepare;
+  for(int i=1;i<=15;i++)
+ f5_prepare.push_back(v_left[i]);
+  pos=-1;
   
-   for(int i=0;i<6;i++)
-    {
-    string str=v3[i];
-     if(str=="?")
-     count++;
-     else if(str=="X0")
+   for(int l=0;l<f0_prepare.size();l++)
+  {
+  if(f0_prepare[l]==f0[0])
+  {
+     int k=1;
+     while(k<f0.size()&&(l+k)<f0_prepare.size()&&f0[k]==f0_prepare[l+k])
+     k++;
+     if(k==f0.size())
      {
-     val=1;
+     pos=l;
      break;
      }
-     else
-     break;
-    }
   }
-  else
-      val=0;
-  printf("node %d has val,count of = (%d,%d)\n",myrank,val,count);
-  MPI_Barrier(MPI_COMM_WORLD);
-  if(val==1)
-  {
-    val=count+1;
-    if(val==1||val==2||val==5||val==6||val==7)
-    p.state="0";
-    if(val==3||val==4)
-    p.state="1";
   }
-  else
-  val=0;
-    MPI_Issend(&val,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-  if(tmp!=0)
+  if(pos!=-1)
   {
-  if(tmp==1||tmp==2||tmp==5||tmp==6||tmp==7)
+  if((pos-2)==-1)
+  p.state="0";
+  if((pos-2)==0)
+  p.state="0";
+  if((pos-2)==1)
   p.state="1";
-  if(tmp==3||tmp==4)
+  if((pos-2)==-2)
+  p.state="1";
+  }
+  
+  pos=-1;
+    for(int l=0;l<7;l++)
+  {
+  if(f1_prepare[l]==f1[0])
+  {
+     int k=1;
+     while(k<f1.size()&&(l+k)<7&&f1[k]==f1_prepare[l+k])
+     k++;
+     if(k==f1.size())
+     {
+     pos=l;
+     break;
+     }
+  }
+  }
+  if(pos!=-1)
+  {
+  if(pos-3==1||pos-3==-1||pos-3==-3)
+  p.state="1";
+  if(pos-3==0||pos-3==-2)
+  p.state="0";
+  }
+  pos=-1;
+      for(int l=0;l<9;l++)
+  {
+  if(f2_prepare[l]==f2[0])
+  {
+     int k=1;
+     while(k<f2.size()&&(l+k)<9&&f2[k]==f2_prepare[l+k])
+     k++;
+     if(k==f2.size())
+     {
+     pos=l;
+     break;
+     }
+  }
+  }
+  if(pos!=-1)
+  {
+  if(pos-4==0||pos-4==-3)
+  p.state="1";
+  if((pos-4)==1||pos-4==-1||pos-4==-2||pos-4==-4)
+  p.state="0";
+  }
+  pos=-1;
+        for(int l=0;l<11;l++)
+  {
+  if(f3_prepare[l]==f3[0])
+  {
+     int k=1;
+     while(k<f3.size()&&(l+k)<11&&f3[k]==f3_prepare[l+k])
+     k++;
+     if(k==f3.size())
+     {
+     pos=l;
+     break;
+     }
+  }
+  }
+  if(pos!=-1)
+  {
+  if(pos-5==0||pos-5==-2||pos-5==-4)
+  p.state="1";
+  if(pos-5==1||pos-5==-1||pos-5==-3||pos-5==-5)
+  p.state="0";
+  }
+  pos=-1;
+    for(int l=0;l<13;l++)
+  {
+  if(f4_prepare[l]==f4[0])
+  {
+     int k=1;
+     while(k<f4.size()&&(l+k)<13&&f4[k]==f4_prepare[l+k])
+     k++;
+     if(k==f4.size())
+     {
+     pos=l;
+     break;
+     }
+  }
+  }
+  if(pos!=-1)
+  {
+  if(pos-6==1||pos-6==-1||pos-6==-4||pos-6==-6)
+  p.state="1";
+  if(pos-6==0||pos-6==-2||pos-6==-3||pos-6==-5)
+  p.state="0";
+  }
+  pos=-1;
+   for(int l=0;l<15;l++)
+  {
+  if(f5_prepare[l]==f5[0])
+  {
+     int k=1;
+     while(k<f5.size()&&(l+k)<15&&f5[k]==f5_prepare[l+k])
+     k++;
+     if(k==f5.size())
+     {
+     pos=l;
+     break;
+     }
+  }
+  }
+  if(pos!=-1)
+  {
+  if(pos-7==1||pos-7==-1||pos-7==-3||pos-7==-5||pos-7==-7)
+  p.state="1";
+  if(pos-7==0||pos-7==-2||pos-7==-4||pos-7==-6)
+  p.state="0";
+  }
+  pos=-1;
+      for(int l=0;l<17;l++)
+  {
+  if(v_left[l]==f6[0])
+  {
+     int k=1;
+     while(k<f6.size()&&(l+k)<17&&f6[k]==v_left[l+k])
+     k++;
+     if(k==f6.size())
+     {
+     pos=l;
+     break;
+     }
+  }
+  }
+  if(pos!=-1)
+  {
+  if(pos-8==1||pos-8==-2||pos-8==-3||pos-8==-5||pos-8==-8)
+  p.state="1";
+  if(pos-8==0||pos-8==-1||pos-8==-3||pos-8==-4||pos-8==-6||pos-8==-7)
   p.state="0";
   }
   
-  MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp!=0)
-    {
-    if(tmp==1||tmp==3||tmp==4||tmp==7)
-    p.state="0";
-    if(tmp==2||tmp==5||tmp==6)
-    p.state="1";
-    val=tmp;
-    }
-    else
-    val=0;
-     MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp!=0)
-    {
-    if(tmp==2||tmp==3||tmp==5||tmp==6)
-    p.state="0";
-    if(tmp==1||tmp==4||tmp==7)
-    p.state="1";
-    val=tmp;
-    }
-    else
-    val=0;
-    MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp!=0)
-    {
-    if(tmp==4||tmp==5||tmp==7)
-    p.state="0";
-    if(tmp==2||tmp==3||tmp==6)
-    p.state="1";
-    val=tmp;
-    }
-    else
-    val=0;
-    MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp!=0)
-    {
-    if(tmp==3||tmp==6||tmp==7)
-    p.state="0";
-    if(tmp==4||tmp==5)
-    p.state="1";
-    val=tmp;
-    }
-    else
-    val=0;
-    MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp!=0)
-    {
-    if(tmp==4||tmp==5)
-    p.state="0";
-    if(tmp==6||tmp==7)
-    p.state="1";
-    val=tmp;
-    }
-    else
-    val=0;
-    MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp!=0)
-    {
-    if(tmp==6||tmp==7)
-    p.state="0";
-    if(tmp==5)
-    p.state="1";
-    val=tmp;
-    }
-    else
-    val=0;
-    MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp!=0)
-    {
-    if(tmp==7)
-    p.state="0";
-    if(tmp==6)
-    p.state="1";
-    val=tmp;
-    }
-    else
-    val=0;
-       MPI_Issend(&val,1,MPI_INT,rightid,99,MPI_COMM_WORLD,&send_request);
-    MPI_Recv(&tmp,1,MPI_INT,leftid,99,MPI_COMM_WORLD,&recv_status);
-    MPI_Wait(&send_request,&send_status);
-    if(tmp!=0)
-    {
-    if(tmp==7)
-    p.state="1";
-    }
-    else
-    val=0;
+  
     MPI_Barrier(MPI_COMM_WORLD);
     if(myrank==0)
 	 printf("After Filling process\n");
 	
 	 printf("node %d has state %s\n",myrank,p.state);
-    if(p.state=="?")
+     MPI_Barrier(MPI_COMM_WORLD);
+    if(p.state=="0"||p.state=="1")
     {
-    flag=1;
+    break;
     }
-    printf("%d = %d\n",myrank,flag);
     } 
     
   MPI_Finalize();
